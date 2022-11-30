@@ -1,0 +1,96 @@
+@extends('layout')
+{{-- untuk memanggil file layout  --}}
+
+@section('content')
+    <section class="vh-100">
+        <div class="container p-5 h-100">
+          {{-- saat berhasil login --}}
+          @if (Session::get('success'))
+              <div class="alert alert-success w-100">
+                 {{ Session::get('success') }}
+              </div>  
+          @endif
+
+          {{-- saat password salah --}}
+          @if (Session::get('fail'))
+          <div class="alert alert-danger w-100">
+             {{ Session::get('fail') }}
+          </div>  
+           @endif
+ 
+          {{-- dari isLogin --}}
+             @if (Session::get('notAllowed'))
+          <div class="alert alert-danger w-100">
+             {{ Session::get('notAllowed') }}
+          </div>  
+           @endif
+           
+       @if ($errors->any())
+        <div class="alert alert-danger">
+          <ul>
+              @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+              @endforeach
+          </ul>
+        </div>
+      @endif
+
+          <div class="row justify-content-center mt-5">
+            <div class="col-md-6 col-lg-6 col-xl-5 d-flex justify-content-center">    
+              <img src="{{ asset('assets/img/login.png') }}"
+                class="img-fluid" alt="Phone image" width="375px" style="padding-top: 10px">
+            </div>
+            
+            <div class="col-md-7 col-lg-8 col-xl-6 offset-xl-1">
+              
+                <div class="d-flex justify-content-center mt-3">
+                  <h1 style="color: #062568; font-weight : 600;"> Login</h1>
+                </div>
+
+               <form action="{{ route('login.auth') }}" method="POST" class="">
+               @method('POST')
+                @csrf
+                
+                 <!-- Email input -->
+                 <div class="form-outline mt-4 mb-4">
+                  <label class="form-label" >Username</label>
+                  <input type="text" name="username" class="form-control form-control-lg" />
+                </div>
+      
+                <!-- Password input -->
+                <div class="form-outline mb-4">
+                  <label class="form-label" >Password</label>
+                  <input type="password" name="password" class="form-control form-control-lg" />
+                </div>
+      
+                <div class="d-flex justify-content-around align-items-center mb-4">
+                  <a href="/register">Create Account?</a>
+                </div>
+      
+                <!-- Submit button -->
+                <center>
+                  <button type="submit" class="btn btn-primary btn-lg btn-block ">Sign in</button>
+                </center>
+                
+                {{-- <div class="divider d-flex align-items-center my-4">
+                  <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
+                </div>
+                <center>
+                  <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
+                  role="button">
+                  <i class="fab fa-facebook-f me-2"></i> with Facebook
+                </a>
+                <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
+                  role="button">
+                  <i class="fa-brands fa-google"></i> with Google</a>
+
+                </center> --}}
+
+               </form>
+
+            </div>
+          </div>
+        </div>
+      </section>
+      @endsection('content')
+   
