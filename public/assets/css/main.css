@@ -40,6 +40,10 @@ body{
     right:14px;
 }
 
+.nav-item{
+    text-decoration: none;
+}
+
 .go-button{
     border:none;
     height:50px;

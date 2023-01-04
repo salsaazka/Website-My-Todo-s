@@ -70,6 +70,8 @@
                 <a href="/todo/edit/{{$todo['id']}}" >
                   <i class="fas fa-arrow-right btn"> </i>
                 </a>
+                
+              </div>
             </div>
         </div>            
      @endforeach

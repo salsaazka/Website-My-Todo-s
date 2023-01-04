@@ -22,7 +22,7 @@ class TodosController extends Controller
         return view('dashboard.register');
     }
 
-    public function inputRegister(Request$request)
+    public function inputRegister(Request $request)
     {
      //testing hasil input
      // dd($request->all());
@@ -42,6 +42,7 @@ class TodosController extends Controller
         'username'=> $request->username,
         'email'=> $request->email,
         'password'=> Hash::make($request->password),
+        'role' =>'user',
     ]);
 
     //apabila berhasil akan diarahkan ke halaman login dengan pesan success
@@ -156,7 +157,9 @@ class TodosController extends Controller
             'title' => 'required|min:3',
             'date' => 'required',
             'description' => 'required|min:8',
+          
         ]);
+       
         //update data yang id nya sama dengan id dari route, updatenya ke db bagian table todos
         Todos::where('id', $id)->update([
             'title' => $request->title,
@@ -167,7 +170,7 @@ class TodosController extends Controller
         ]);//untuk tau data mana yang mau di update
 
         //jika berhasil akan diarahkan ke halaman awal
-        return redirect('/todo/')->with('successUpdate', 'Data berhasil diperbarui!');
+        return redirect('/todo')->with('successUpdate', 'Data berhasil diperbarui!');
         
     }
 
@@ -182,5 +185,74 @@ class TodosController extends Controller
         return redirect()->route('todo.index')->with('deleted', 'Berhasil menghapus data project');
         // return redirect('/todo')->with('deleted', 'Berhasil menghapus data project ');
     
+    }
+    public function detail()
+    {
+        $user = user::where('id', Auth::user()->id)->first();
+       return view('dashboard.detail', compact('user'));
+    }
+    public function data()
+    {
+        $users = user::all();
+        return view('dashboard.data', compact('users'))->with('i', (request()->input('page',1)-1));
+    }
+
+    public function detailUpload()
+    {
+    
+        return view('dashboard.upload-profile');
+    }
+
+    public function detailChange(Request $request)
+    {
+        //validasi mimes: menentukan ekstensi fiel yang boleh diupload
+        //image: menentukan bahwa fie yang di upload hanya boleh berbentuk image
+        $request->validate([
+            'image_profile' => 'required|image|mimes:png,jpg,jpeg,gif,svg',
+        ]);
+
+        //cara kak fema
+        //memasukkan file yang diupload ke input name nya image_profile ke dalam variable
+        $image = $request->file('image_profile');
+        //mengubah nama file yang diupload menjadi waktu random.ekstensinya
+        $imgName = time().rand().'.'.$image->extension();
+        //cek apakah pada public/asset/img/ sudah terdapat file image
+        //jika tidaak (!) maka didalam if akan dijalankan 
+        //$image->getClientOriginalName() mengambil nama original dari file yang diupload
+        if(!file_exists(public_path('/assets/img/'.$image->getClientOriginalName()))){
+            //set untuk menyimpan file nya
+            $dPath = public_path('/assets/img/');
+            //memindahkan file yang diupload ke directory yang telah ditentukan
+            $image->move($dPath, $imgName);
+            $uploaded = $imgName;
+        }else{
+            $uploaded = $image->getClientOriginalName();
+        }
+        //kirim nama file ke column image_profile di db, jika berhasil diarahkan kembali ke halaman profile
+        User::where('id', Auth::user()->id)->update([
+                'image_profile' => $uploaded,
+        ]);
+        return redirect()->route('todo.detail')->with('success', 'Image uploaded Successfully!');
+      
+        //CARA AWAL
+        // $request->validate([
+        //     'image_profile' => 'required|image|mimes:png,jpg,jpeg,gif,svg|max:2048'
+        // ]);
+        // $imageName = time().'.'.$request->image_profile->extension();
+
+        // // Public Folder
+        // $request->image_profile->move(public_path('/assets/img/'), $imageName);
+        // User::where('id', Auth::user()->id)->update([
+        //     'image_profile' => $imageName
+        // ]);
+
+        // return redirect('todo/detail')->with('success', 'Image uploaded Successfully!')
+        // ->with('image_profile', $imageName);
+     }
+    //middleware
+    public function error()
+    {
+
+        return view('dashboard.error');
     }
 }

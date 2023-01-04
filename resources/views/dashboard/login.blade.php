@@ -71,21 +71,7 @@
                 <center>
                   <button type="submit" class="btn btn-primary btn-lg btn-block ">Sign in</button>
                 </center>
-                
-                {{-- <div class="divider d-flex align-items-center my-4">
-                  <p class="text-center fw-bold mx-3 mb-0 text-muted">OR</p>
-                </div>
-                <center>
-                  <a class="btn btn-primary btn-lg btn-block" style="background-color: #3b5998" href="#!"
-                  role="button">
-                  <i class="fab fa-facebook-f me-2"></i> with Facebook
-                </a>
-                <a class="btn btn-primary btn-lg btn-block" style="background-color: #55acee" href="#!"
-                  role="button">
-                  <i class="fa-brands fa-google"></i> with Google</a>
-
-                </center> --}}
-
+              
                </form>
 
             </div>

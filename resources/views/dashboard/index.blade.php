@@ -15,6 +15,7 @@
                {{ Session::get('successAdd') }}
             </div>  
           @endif
+          {{-- Session sebagai class jadi S nya besar --}}
           @if (Session::get('successUpdate'))
           <div class="alert alert-success w-100">
              {{ Session::get('successUpdate') }}
@@ -26,6 +27,13 @@
         </div>
         @endif
 
+        @if (Auth::user()->role == 'admin')
+        <div class="d-flex justify content-center mt-5">
+            <a href="/todo/data" class="btn btn-primary">Lihat Data Pengguna</a>
+        </div>
+     @else
+    
+   
     <div class="d-flex align-items-start justify-content-between">
         <div class="d-flex flex-column">
             <div class="h5">My Todo's</div>
@@ -37,6 +45,7 @@
                 <a href="{{route('todo.create')}}" class="text-success"><i class="fa-solid fa-plus"></i> Create</a> | <a href="{{route('todo.complated')}}"><i class="fa-solid fa-check-to-slot"></i> Complated</a>
             </span>
         </div>
+        
         <div class="info btn ml-md-4 ml-0">
             <span class="fas fa-info" title="Info"></span>
         </div>
@@ -90,9 +99,10 @@
                 <a href="/todo/edit/{{$todo['id']}}" >
                   <i class="fas fa-arrow-right btn"> </i>
                 </a>
-            </div>
+            </div> 
         </div>            
      @endforeach
     </div>
+ @endif
 </div>
 @endsection
